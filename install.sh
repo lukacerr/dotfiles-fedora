@@ -65,7 +65,8 @@ sudo ufw default deny incoming
 sudo ufw default allow outgoing
 sudo ufw enable
 
-# WEB BROSWER & DEFAULTS
+# WEB BROSWER & TEXT EDITOR DEFAULTS
+curl -f https://zed.dev/install.sh | sh
 install_copr "sneexy/zen-browser" "zen-browser"
 xdg-settings set default-web-browser app.zen_browser.zen.desktop
 xdg-mime default zen-browser.desktop x-scheme-handler/https x-scheme-handler/http
@@ -97,8 +98,6 @@ for i in "${to_install_dnf[@]}"; do install_dnf $i; done
 to_install_flatpak=("md.obsidian.Obsidian" "com.obsproject.Studio")
 for i in "${to_install_flatpak[@]}"; do install_flatpak $i; done
 
-# curl -f https://zed.dev/install.sh | sh
-
 # DOTFILES SYNC
 #git clone https://github.com/lukacerr/dotfiles.git && rm -rf dotfiles/.git
 #cp -rfv dotfiles/. $HOME && rm -rf dotfiles
@@ -119,7 +118,7 @@ for i in "${to_install_flatpak[@]}"; do install_flatpak $i; done
 #gsettings set org.gnome.nautilus.desktop font 'Inter 11'
 
 # Enjoy :)
-sudo dnf clean -y
+sudo dnf clean -y all
 sudo dnf check -y
 sudo dnf autoremove -y
 sudo flatpak uninstall --unused -y
