@@ -1,15 +1,15 @@
 #!bin/bash
 
 # FUNCTIONS
-install_flatpak() { sudo flatpak install -y --no-related --app "$1"; }
-install_dnf() { sudo dnf install "$1" -y --best --allowerasing --skip-broken; }
-uninstall_dnf() { sudo dnf remove "$1" -y; }
-enable_copr() { sudo dnf copr enable "$1" -y; }
+install_flatpak() { sudo flatpak install -y --no-related --app $1; }
+install_dnf() { sudo dnf install $1 -y --best --allowerasing --skip-broken; }
+uninstall_dnf() { sudo dnf remove $1 -y; }
+enable_copr() { sudo dnf copr enable $1 -y; }
 install_copr() { enable_copr $1; install_dnf $2; }
 tee_append() { echo "$2" | sudo tee -a $1; }
 
 # INITIAL UNINSTALLS
-uninstall_dnf "vim-minimal firewalld libreport gnome-disk-utility gnome-icon-theme"
+uninstall_dnf "vim-minimal firewalld libreport gnome-disk-utility gnome-icon-theme system-config-language"
 
 # RPM FUSION ADD-ON & DNF CONFIGURATION
 tee_append "/etc/dnf/dnf.conf" "install_weak_deps=False"
@@ -40,13 +40,14 @@ install_copr "atim/starship" "straship"
 starship preset no-nerd-font -o ~/.config/starship.toml
 
 # NIRI INSTALLATION
-# FIXME: xwayland, portales, etc
 install_copr "yalter/niri" "niri"
-# pipewire, wireplumber, audio setup ?
+install_dnf "xdg-desktop-portal-gtk xdg-desktop-portal-gnome"
+install_dnf "gnome-keyring plasma-polkit-agent"
+install_dnf "xwayland-satellite"
 
 # GRAPHICAL TARGET SETUP
-# "greetd" "gtkgreet" "cage"
-# sudo systemctl enable greetd # FIXME: DEPDENDE DEL GREETER
+install_dnf "greetd" # tuigreet
+sudo systemctl enable greetd
 sudo systemctl set-default graphical.target
 
 # JOURNAL, HOST & NOPASSWD CONFIG
@@ -55,15 +56,15 @@ tee_append "/etc/sudoers.d/nopasswd" "$USER ALL=(ALL:ALL) NOPASSWD: ALL"
 sudo hostnamectl set-hostname $USER-pc
 
 # FIREWALL SETUP
-install_dnf ufw
+install_dnf "ufw"
 sudo ufw default deny incoming
 sudo ufw default allow outgoing
 sudo ufw enable
 
 # WEB BROSWER & DEFAULTS
-install_flatpak "app.zen_browser.zen"
+install_copr "sneexy/zen-browser" "zen-browser"
 xdg-settings set default-web-browser app.zen_browser.zen.desktop
-xdg-mime default app.zen_browser.zen.desktop x-scheme-handler/https x-scheme-handler/http
+xdg-mime default zen-browser.desktop x-scheme-handler/https x-scheme-handler/http
 
 # DEV TOOLS SET-UP
 install_dnf "git docker docker-compose"
@@ -75,21 +76,18 @@ sudo usermod -aG docker $USER
 
 # EXTRA INSTALLATIONS
 to_enable_copr=("atim/lazygit" "atim/lazydocker")
-for i in "${to_enable_copr[@]}"; do enable_copr $i; done
-
 to_install_dnf=(
-	# unzip, wl-clipboard, otras utils del estilo?
   "fastfetch btop gdu fzf brightnessctl"
-  # kwallet | gnome wallet o similar, agent-polkit
   "waybar fuzzel thunar" # mpv/vlc, session bar, notif daemon
-  # fcitx o ibus wayland + mozc o jp
+  # fcitx5 + mozc
   "nmtui" # bluetooth, audio control
   "lazygit lazydocker" # ATAC, rainfrog/dbgate/algo para db
-  # zed editor, libreoffice calc y word
-  # kde-connect
-  # nwg-look, kvantum qt6 & kvantum manager, qt6ct ?
+  "libreoffice-calc libreoffice-writer" # zed editor via sh script
+  "kde-connect"
+  # nwg-look, kvantum manager, qt6ct ?
   "rsms-inter-fonts jetbrains-mono-nl-fonts google-noto-sans-jp-fonts"
 )
+for i in "${to_enable_copr[@]}"; do enable_copr $i; done
 for i in "${to_install_dnf[@]}"; do install_dnf $i; done
 
 to_install_flatpak=("md.obsidian.Obsidian" "com.obsproject.Studio")
@@ -104,6 +102,7 @@ for i in "${to_install_flatpak[@]}"; do install_flatpak $i; done
 #Mark force-push.sh as executable
 #sudo chmod +x force-push.sh
 
+# dconf write /org/gnome/desktop/interface/color-scheme '"prefer-dark"'
 #nwg-look -a
 #gsettings set org.gnome.desktop.interface gtk-theme HyprLuka-Colloid
 #gsettings set org.gnome.desktop.interface icon-theme HyprLuka-Papirus
