@@ -76,19 +76,19 @@ install_dnf "git docker docker-compose"
 # rustup default stable
 sudo usermod -aG docker $USER
 
-# BATTERY SAVING # TODO
+# TODO: BATTERY SAVING
 
 # EXTRA INSTALLATIONS
-to_enable_copr=("atim/lazygit" "atim/lazydocker")
+to_enable_copr=("atim/lazygit" "atim/lazydocker" "che/nerd-fonts")
 to_install_dnf=(
   "fastfetch btop gdu fzf brightnessctl"
-  "waybar fuzzel thunar" # mpv/vlc, session bar, notif daemon
+  "waybar fuzzel thunar" # mpv/vlc, session bar, notif daemon, idle daemon
   "fcitx5 fcitx5-mozc fcitx5-configtool"
   "nmtui" # bluetooth, audio control
   "lazygit lazydocker" # ATAC, rainfrog/dbgate/algo para db
   "libreoffice-calc libreoffice-writer" # zed editor via sh script
   "kde-connect udiskie"
-  "rsms-inter-fonts jetbrains-mono-nl-fonts google-noto-sans-jp-fonts"
+  "rsms-inter-fonts jetbrains-mono-nl-fonts google-noto-sans-jp-fonts nerd-fonts"
   # nwg-look, kvantum manager, qt6ct ?
 )
 for i in "${to_enable_copr[@]}"; do enable_copr $i; done
@@ -96,6 +96,8 @@ for i in "${to_install_dnf[@]}"; do install_dnf $i; done
 
 to_install_flatpak=("md.obsidian.Obsidian" "com.obsproject.Studio")
 for i in "${to_install_flatpak[@]}"; do install_flatpak $i; done
+
+# curl -f https://zed.dev/install.sh | sh
 
 # DOTFILES SYNC
 #git clone https://github.com/lukacerr/dotfiles.git && rm -rf dotfiles/.git
