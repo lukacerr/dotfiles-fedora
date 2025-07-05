@@ -2,7 +2,7 @@
 
 # FUNCTIONS
 install_flatpak() { sudo flatpak install flathub -y --no-related --app $1; }
-install_dnf() { sudo dnf install $1 -y --best --allowerasing --skip-broken; }
+install_dnf() { sudo dnf install $1 -y --allowerasing --skip-broken; }
 uninstall_dnf() { sudo dnf remove $1 -y; }
 enable_copr() { sudo dnf copr enable $1 -y; }
 install_copr() { enable_copr $1; install_dnf $2; }
@@ -13,6 +13,7 @@ uninstall_dnf "vim-minimal firewalld libreport gnome-disk-utility gnome-icon-the
 
 # RPM FUSION ADD-ON & DNF CONFIGURATION
 tee_append "/etc/dnf/dnf.conf" "install_weak_deps=False"
+tee_append "/etc/dnf/dnf.conf" "best=True"
 install_dnf "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm"
 install_dnf "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm"
 sudo dnf config-manager setopt fedora-cisco-openh264.enabled=1 -y
