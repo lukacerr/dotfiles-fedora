@@ -25,6 +25,10 @@ sudo dnf update @multimedia --setopt="install_weak_deps=False" --exclude=Package
 sudo dnf swap mesa-va-drivers mesa-va-drivers-freeworld -y
 sudo dnf swap mesa-vdpau-drivers mesa-vdpau-drivers-freeworld -y
 
+# ROCM INSTALLATION
+sudo usermod -a -G render,video $LOGNAME
+install_dnf "rocminfo rocm-opencl"
+
 # FLATPAK SUPPORT
 install_dnf "flatpak"
 flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
@@ -79,13 +83,13 @@ to_enable_copr=("atim/lazygit" "atim/lazydocker")
 to_install_dnf=(
   "fastfetch btop gdu fzf brightnessctl"
   "waybar fuzzel thunar" # mpv/vlc, session bar, notif daemon
-  # fcitx5 + mozc
+  "fcitx5 fcitx5-mozc fcitx5-configtool"
   "nmtui" # bluetooth, audio control
   "lazygit lazydocker" # ATAC, rainfrog/dbgate/algo para db
   "libreoffice-calc libreoffice-writer" # zed editor via sh script
   "kde-connect"
-  # nwg-look, kvantum manager, qt6ct ?
   "rsms-inter-fonts jetbrains-mono-nl-fonts google-noto-sans-jp-fonts"
+  # nwg-look, kvantum manager, qt6ct ?
 )
 for i in "${to_enable_copr[@]}"; do enable_copr $i; done
 for i in "${to_install_dnf[@]}"; do install_dnf $i; done
