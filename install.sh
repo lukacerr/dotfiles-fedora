@@ -1,7 +1,7 @@
 #!bin/bash
 
 # FUNCTIONS
-install_flatpak() { sudo flatpak install -y --no-related --app $1; }
+install_flatpak() { sudo flatpak install flathub -y --no-related --app $1; }
 install_dnf() { sudo dnf install $1 -y --best --allowerasing --skip-broken; }
 uninstall_dnf() { sudo dnf remove $1 -y; }
 enable_copr() { sudo dnf copr enable $1 -y; }
@@ -41,7 +41,7 @@ xdg-user-dirs-update --force
 install_dnf "alacritty fish"
 sudo chsh -s $(which fish) $USER
 install_copr "atim/starship" "straship"
-starship preset no-nerd-font -o ~/.config/starship.toml
+# starship preset no-nerd-font -o ~/.config/starship.toml
 
 # NIRI INSTALLATION
 install_copr "yalter/niri" "niri"
@@ -124,6 +124,6 @@ sudo dnf check -y
 sudo dnf autoremove -y
 sudo flatpak uninstall --unused -y
 sudo flatpak repair
-sudo reboot
+# sudo reboot
 
 # Made by Luka Cerrutti (@lukacerr at most social media)
