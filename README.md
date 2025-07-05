@@ -1,5 +1,5 @@
 # Luka Cerrutti's Fedora dotfiles
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/lukacerr/dotfiles/main/run.sh | sh
+curl -f https://raw.githubusercontent.com/lukacerr/dotfiles/main/install.sh | sh
 ```
