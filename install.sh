@@ -87,7 +87,7 @@ to_install_dnf=(
   "nmtui" # bluetooth, audio control
   "lazygit lazydocker" # ATAC, rainfrog/dbgate/algo para db
   "libreoffice-calc libreoffice-writer" # zed editor via sh script
-  "kde-connect"
+  "kde-connect udiskie"
   "rsms-inter-fonts jetbrains-mono-nl-fonts google-noto-sans-jp-fonts"
   # nwg-look, kvantum manager, qt6ct ?
 )
